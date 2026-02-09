@@ -20,12 +20,10 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd app
         pip install -r requirements.txt
 
     - name: Run app (sanity check)
       run: |
-        cd app
         python app.py &
         sleep 5
         pkill -f app.py
