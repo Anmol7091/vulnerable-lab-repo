@@ -39,4 +39,4 @@ jobs:
           -e ACCUKNOX_TOKEN=${{ secrets.ACCUKNOX_TOKEN }} \
           -e ACCUKNOX_LABEL=${{ secrets.ACCUKNOX_LABEL }} \
           -v ${{ github.workspace }}:/workspace \
-          gcshubham/sca-engine:v3
+          gcshubham/sca-engine:v4
