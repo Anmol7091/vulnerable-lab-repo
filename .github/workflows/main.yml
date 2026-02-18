@@ -30,18 +30,17 @@ jobs:
       - name: Build Docker image
         run: docker build -t vuln-app:latest .
 
-      - name: Run AccuKnox SCA Scan
+      - name: Run Trivy Scan
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          format: 'json'
+          output: 'output.json'
+          scan-ref: '.'
+
+      - name: Upload results to AccuKnox
         run: |
-          echo "Installing Trivy..."
-          sudo apt-get update -y
-          sudo apt-get install -y wget
-          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.0_Linux-64bit.deb
-          sudo dpkg -i trivy_0.50.0_Linux-64bit.deb
-
-          echo "Running SCA Scan..."
-          trivy fs -f json -o output.json .
-
-          echo "Uploading results to AccuKnox..."
           curl -v -X POST "https://cspm.${{ secrets.ACCUKNOX_ENDPOINT }}/api/v1/artifact/?data_type=TR&label_id=${{ secrets.ACCUKNOX_LABEL }}&save_to_s3=true" \
             -H "Authorization: Bearer ${{ secrets.ACCUKNOX_TOKEN }}" \
             --form 'file=@"./output.json"'
+
