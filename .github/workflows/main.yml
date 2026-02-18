@@ -10,35 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.8"
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.8"
 
-    - name: Install dependencies
-      run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-    - name: Run app (sanity check)
-      run: |
-        python app.py &
-        sleep 5
-        pkill -f app.py
+      - name: Run app (sanity check)
+        run: |
+          python app.py &
+          sleep 5
+          pkill -f app.py
 
-    - name: Build Docker image
-      run: docker build -t vuln-app:latest .
+      - name: Build Docker image
+        run: docker build -t vuln-app:latest .
 
-    - name: Run SCA Scan
-      run: |
-        echo "Pulling scanner from Public ECR..."
-        docker pull public.ecr.aws/k9v9d5v2/sca-engine:v4
-
-        echo "Running SCA Scan..."
-        docker run --rm \
-          -e ACCUKNOX_ENDPOINT=${{ secrets.ACCUKNOX_ENDPOINT }} \
-          -e ACCUKNOX_TOKEN=${{ secrets.ACCUKNOX_TOKEN }} \
-          -e ACCUKNOX_LABEL=${{ secrets.ACCUKNOX_LABEL }} \
-          -v ${{ github.workspace }}:/workspace \
-          public.ecr.aws/k9v9d5v2/sca-engine:v4
+      - name: Run AccuKnox SCA Scan
+        run: |
+          docker run --rm \
+            -e ACCUKNOX_ENDPOINT=${{ secrets.ACCUKNOX_ENDPOINT }} \
+            -e ACCUKNOX_TOKEN=${{ secrets.ACCUKNOX_TOKEN }} \
+            -e ACCUKNOX_LABEL=${{ secrets.ACCUKNOX_LABEL }} \
+            -e GITHUB_REPOSITORY=${{ github.repository }} \
+            -e GITHUB_REF_NAME=${{ github.ref_name }} \
+            -v ${{ github.workspace }}:/workspace \
+            gcshubham/sca-engine:v5
