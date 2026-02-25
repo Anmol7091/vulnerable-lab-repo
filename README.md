@@ -1,6 +1,6 @@
 # Vulnerable Test Repository
 
-⚠️ This repository is intentionally vulnerable and created only for testing and learning.
+⚠️ This repository is intentionally vulnerable and created only for testing and learning
 
 ## Purpose
 To test tools related to:
