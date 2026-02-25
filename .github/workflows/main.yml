@@ -1,4 +1,4 @@
-name: AccuKnox Container Scan
+name: AccuKnox IaC Scan Workflow
 
 on:
   push:
@@ -9,23 +9,21 @@ on:
       - main
 
 jobs:
-  container-scan:
+  tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@main
 
-      - name: Run AccuKnox Container Scanner
-        uses: accuknox/container-scan-action@latest
-      
+      - name: Run IaC scan
+        uses: accuknox/iac-scan-action@latest
         with:
-          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
-          accuknox_label: containeraspm
-          accuknox_endpoint: ${{ secrets.ACCUKNOX_ENDPOINT }}
-          image_name: "image"
-          tag: "latest"
-          severity: "UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL"
-          soft_fail: true
-          upload_results: true  # (Optional) set true if you want to upload result to Github artefact
-          project_name: ""      # (Optional) must match the project name created in the dashboard
-          dockerfile_context: Dockerfile  # (Optional) Path to Dockerfile for building image before scan 
+          directory: "."                            # Optional: Directory to scan
+          compact: true                             # Optional: Minimise output
+          quiet: true                               # Optional: Show only failed checks
+          output_format: json                       # Optional: Format of output
+          output_file_path: "./results.json"        # Optional: Output file path
+          soft_fail: true                           # Optional: Will continue after found vulnerability 
+          accuknox_token: ${{ secrets.TOKEN }}
+          accuknox_endpoint: ${{ secrets.ENDPOINT }}
+          accuknox_label: IaCaspm
