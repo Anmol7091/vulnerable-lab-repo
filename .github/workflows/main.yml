@@ -14,14 +14,7 @@ jobs:
 
       - name: AccuKnox Secret Scan TEST
         uses: accuknox/secret-scan-action@latest
-        with:
-          branch: "main"                             # Optional
-          results: " "                               # Optional
-          exclude_paths: "tests/,docs/"              # Optional
-          additional_arguments: ""                   # Optional
-          base_command: ""                           # Optional
-          output_format: json                        # Optional
-          output_file_path: "./secret_results.json"  # Optional
+        with: # Optional
           accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
           accuknox_endpoint: ${{ secrets.ACCUKNOX_ENDPOINT }}
           accuknox_label: secretscan
