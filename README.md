@@ -1,4 +1,4 @@
-# Vulnerable Test Repository.
+# Vulnerable Test Repository..
 
 ⚠️ This repository is intentionally vulnerable and created only for testing and learning
 
