@@ -1,29 +1,28 @@
-name: AccuKnox IaC Scan Workflow
+name: AccuKnox Secret Scan Workflow
 
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
+      - secret
 
 jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@main
+        uses: actions/checkout@v3
 
-      - name: Run IaC scan
-        uses: accuknox/iac-scan-action@latest
+      - name: AccuKnox Secret Scan TEST
+        uses: accuknox/secret-scan-action@latest
         with:
-          directory: "."                            # Optional: Directory to scan
-          compact: true                             # Optional: Minimise output
-          quiet: true                               # Optional: Show only failed checks
-          output_format: json                       # Optional: Format of output
-          output_file_path: "./results.json"        # Optional: Output file path
-          soft_fail: true                           # Optional: Will continue after found vulnerability 
-          accuknox_token: ${{ secrets.TOKEN }}
-          accuknox_endpoint: ${{ secrets.ENDPOINT }}
-          accuknox_label: IaCaspm
+          branch: "main"                             # Optional
+          results: " "                               # Optional
+          exclude_paths: "tests/,docs/"              # Optional
+          additional_arguments: ""                   # Optional
+          base_command: ""                           # Optional
+          output_format: json                        # Optional
+          output_file_path: "./secret_results.json"  # Optional
+          accuknox_token: ${{ secrets.ACCUKNOX_TOKEN }}
+          accuknox_endpoint: ${{ secrets.ACCUKNOX_ENDPOINT }}
+          accuknox_label: secretscan
+          soft_fail: true                            # Optional
